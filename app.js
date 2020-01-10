@@ -7,7 +7,7 @@ require('dotenv').config();
 const authController = require('./controllers/auth');
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
