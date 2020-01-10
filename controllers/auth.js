@@ -12,9 +12,8 @@ router.post('/login', async (req, res) => {
     const user = await models.User.findOne({ where: { username } });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-        res.json({
-            message: 'Wrong username or password',
-        }, 401);
+        res.status(401).json({ message: 'Wrong username or password' });
+        return;
     }
 
     const payload = {
