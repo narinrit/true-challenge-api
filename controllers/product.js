@@ -1,20 +1,39 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
+const { Op } = require('sequelize');
 const requireJWTAuth = require('../middlewares/requireJWTAuth');
 const models = require('../models');
 
 const router = express.Router();
 
 router.get('/', requireJWTAuth, async (req, res) => {
+    const {
+        q,
+        orderBy = 'id',
+        order = 'desc',
+    } = req.query;
+
     const page = +req.query.page || 0;
     const limit = +req.query.limit || 10;
     const offset = page * limit;
 
     const where = {};
 
+    if (q) {
+        where[Op.or] = [
+            { name: { [Op.like]: `%${q}%` } },
+            { description: { [Op.like]: `%${q}%` } },
+        ];
+    }
+
     try {
         const total = await models.Product.count({ where });
-        const data = await models.Product.findAll({ offset, limit, where });
+        const data = await models.Product.findAll({
+            offset,
+            limit,
+            where,
+            order: [[orderBy, order]],
+        });
 
         return res.json({
             page, limit, total, data,
