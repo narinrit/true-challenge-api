@@ -1,4 +1,5 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator');
 const requireJWTAuth = require('../middlewares/requireJWTAuth');
 const models = require('../models');
 
@@ -23,7 +24,19 @@ router.get('/', requireJWTAuth, async (req, res) => {
     }
 });
 
-router.post('/', requireJWTAuth, async (req, res) => {
+router.post('/', [
+    requireJWTAuth,
+    check('name').isString(),
+    check('description').isString(),
+    check('quantity').isNumeric(),
+    check('price').isNumeric(),
+    check('shipmentDays').isNumeric(),
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+
     const product = models.Product.build(req.body);
 
     try {
@@ -54,7 +67,19 @@ router.get('/:id', requireJWTAuth, async (req, res) => {
     return res.json(product);
 });
 
-router.put('/:id', requireJWTAuth, async (req, res) => {
+router.put('/:id', [
+    requireJWTAuth,
+    check('name').isString(),
+    check('description').isString(),
+    check('quantity').isNumeric(),
+    check('price').isNumeric(),
+    check('shipmentDays').isNumeric(),
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
 
     const product = await models.Product.findOne({ where: { id } });
