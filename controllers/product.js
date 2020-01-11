@@ -15,11 +15,11 @@ router.get('/', requireJWTAuth, async (req, res) => {
         const total = await models.Product.count({ where });
         const data = await models.Product.findAll({ offset, limit, where });
 
-        res.json({
+        return res.json({
             page, limit, total, data,
         });
     } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
 });
 
@@ -28,13 +28,14 @@ router.post('/', requireJWTAuth, async (req, res) => {
 
     try {
         await product.save();
-        res.json({
+
+        return res.json({
             code: '00',
             message: 'Success',
             id: product.id,
         });
     } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
 });
 
@@ -44,14 +45,13 @@ router.get('/:id', requireJWTAuth, async (req, res) => {
     const product = await models.Product.findOne({ where: { id } });
 
     if (!product) {
-        res.status(404).json({
+        return res.status(404).json({
             code: '404',
             message: 'Product not found.',
         });
-        return;
     }
 
-    res.json(product);
+    return res.json(product);
 });
 
 router.put('/:id', requireJWTAuth, async (req, res) => {
@@ -60,21 +60,21 @@ router.put('/:id', requireJWTAuth, async (req, res) => {
     const product = await models.Product.findOne({ where: { id } });
 
     if (!product) {
-        res.status(404).json({
+        return res.status(404).json({
             code: '404',
             message: 'Product not found.',
         });
-        return;
     }
 
     try {
         await product.update(req.body);
-        res.json({
+
+        return res.json({
             code: '00',
             message: 'Success',
         });
     } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
 });
 
@@ -84,21 +84,21 @@ router.delete('/:id', requireJWTAuth, async (req, res) => {
     const product = await models.Product.findOne({ where: { id } });
 
     if (!product) {
-        res.status(404).json({
+        return res.status(404).json({
             code: '404',
             message: 'Product not found.',
         });
-        return;
     }
 
     try {
         await product.destroy();
-        res.json({
+
+        return res.json({
             code: '00',
             message: 'Success',
         });
     } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
 });
 
