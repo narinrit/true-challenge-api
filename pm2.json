@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "true-challenge-api",
+      "script": "npm",
+      "args" : "start"
+    }
+  ]
+}
