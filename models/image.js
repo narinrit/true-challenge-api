@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         normalKey: {
             type: DataTypes.VIRTUAL(DataTypes.STRING, ['normalPath', 'normalName']),
             get() {
-                return `${this.get('normalPath')}/${this.get('normalName')}`;
+                return `${this.get('normalPath')}${this.get('normalName')}`;
             },
         },
         normalUrl: {
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         originalKey: {
             type: DataTypes.VIRTUAL(DataTypes.STRING, ['originalPath', 'originalName']),
             get() {
-                return `${this.get('originalPath')}/${this.get('originalName')}`;
+                return `${this.get('originalPath')}${this.get('originalName')}`;
             },
         },
         originalUrl: {
