@@ -13,9 +13,11 @@ app.use(bodyParser.json());
 
 const authController = require('./controllers/auth');
 const productController = require('./controllers/product');
+const imageController = require('./controllers/image');
 
 app.use('/auth', authController);
 app.use('/products', productController);
+app.use('/images', imageController);
 
 app.get('/', (req, res) => res.send('Hello World!'));
 

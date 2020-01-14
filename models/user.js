@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
         password: DataTypes.STRING,
         firstName: DataTypes.STRING,
         lastName: DataTypes.STRING,
+        fullName: {
+            type: DataTypes.VIRTUAL(DataTypes.STRING, ['firstName', 'firstName']),
+            get() {
+                return `${this.get('firstName')} ${this.get('lastName')}`;
+            },
+        },
         role: DataTypes.STRING,
     }, {});
 
