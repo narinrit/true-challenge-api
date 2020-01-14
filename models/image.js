@@ -4,6 +4,8 @@ const s3 = new AWS.S3();
 
 module.exports = (sequelize, DataTypes) => {
     const Image = sequelize.define('Image', {
+        imageableId: DataTypes.INTEGER,
+        imageableType: DataTypes.STRING,
         normalPath: DataTypes.STRING,
         normalName: DataTypes.STRING,
         normalWidth: DataTypes.INTEGER,
@@ -48,7 +50,8 @@ module.exports = (sequelize, DataTypes) => {
 
     // eslint-disable-next-line no-unused-vars
     Image.associate = function associate(models) {
-        // associations can be defined here
+        // eslint-disable-next-line no-param-reassign
+        models.Image.Product = models.Image.belongsTo(models.Product, { foreignKey: 'imageableId', constraints: false, as: 'product' });
     };
 
     return Image;

@@ -7,6 +7,12 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
+        imageableId: {
+            type: Sequelize.INTEGER,
+        },
+        imageableType: {
+            type: Sequelize.STRING,
+        },
         normalPath: {
             allowNull: false,
             type: Sequelize.STRING,

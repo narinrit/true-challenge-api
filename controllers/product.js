@@ -39,7 +39,12 @@ router.get('/', requireJWTAuth, async (req, res) => {
             page, limit, total, data,
         });
     } catch (error) {
-        return res.status(500).json(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return res.status(500).json({
+            error: error.name,
+            message: error.message,
+        });
     }
 });
 
@@ -56,10 +61,14 @@ router.post('/', [
         return res.status(422).json({ errors: errors.array() });
     }
 
-    const product = models.Product.build(req.body);
+    const { images, ...productData } = req.body;
 
     try {
+        const product = models.Product.build(productData);
+
         await product.save();
+
+        await product.addImages(images.map((image) => models.Image.build(image)));
 
         return res.json({
             code: '00',
@@ -67,14 +76,22 @@ router.post('/', [
             id: product.id,
         });
     } catch (error) {
-        return res.status(500).json(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return res.status(500).json({
+            error: error.name,
+            message: error.message,
+        });
     }
 });
 
 router.get('/:id', requireJWTAuth, async (req, res) => {
     const { id } = req.params;
 
-    const product = await models.Product.findOne({ where: { id } });
+    const product = await models.Product.findOne({
+        where: { id },
+        include: ['images'],
+    });
 
     if (!product) {
         return res.status(404).json({
@@ -110,15 +127,24 @@ router.put('/:id', [
         });
     }
 
+    const { images, ...productData } = req.body;
+
+    await product.addImages(images.map((image) => models.Image.build(image)));
+
     try {
-        await product.update(req.body);
+        await product.update(productData);
 
         return res.json({
             code: '00',
             message: 'Success',
         });
     } catch (error) {
-        return res.status(500).json(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return res.status(500).json({
+            error: error.name,
+            message: error.message,
+        });
     }
 });
 
@@ -142,7 +168,12 @@ router.delete('/:id', requireJWTAuth, async (req, res) => {
             message: 'Success',
         });
     } catch (error) {
-        return res.status(500).json(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return res.status(500).json({
+            error: error.name,
+            message: error.message,
+        });
     }
 });
 

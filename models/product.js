@@ -1,3 +1,4 @@
+
 module.exports = (sequelize, DataTypes) => {
     const Product = sequelize.define('Product', {
         name: DataTypes.STRING,
@@ -7,9 +8,16 @@ module.exports = (sequelize, DataTypes) => {
         shipmentDays: DataTypes.INTEGER,
     }, {});
 
-    // eslint-disable-next-line no-unused-vars
     Product.associate = function associate(models) {
-        // associations can be defined here
+        // eslint-disable-next-line no-param-reassign
+        models.Product.Images = models.Product.hasMany(models.Image, {
+            foreignKey: 'imageableId',
+            constraints: false,
+            scope: {
+                imageableType: 'product',
+            },
+            as: 'images',
+        });
     };
 
     return Product;
