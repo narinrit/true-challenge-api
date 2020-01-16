@@ -55,10 +55,15 @@ router.post('/', [
     check('quantity').isNumeric(),
     check('price').isNumeric(),
     check('shipmentDays').isNumeric(),
+    check('images').isArray(),
+    check('images.*.id').isNumeric(),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(422).json({
+            message: 'Validate error',
+            errors: errors.array(),
+        });
     }
 
     const { images, ...productData } = req.body;
@@ -110,10 +115,15 @@ router.put('/:id', [
     check('quantity').isNumeric(),
     check('price').isNumeric(),
     check('shipmentDays').isNumeric(),
+    check('images').isArray(),
+    check('images.*.id').isNumeric(),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(422).json({
+            message: 'Validate error',
+            errors: errors.array(),
+        });
     }
 
     const { id } = req.params;
