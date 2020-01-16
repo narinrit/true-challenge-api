@@ -3,6 +3,11 @@
 This project was created for this challenge.
 https://rightman.true-e-logistics.com/full-stack/fullstack-challenge.html
 
+## Stack
+- Express.js
+- Sequelize
+- Passport.js
+
 ## How to setup
 
 ``` bash
