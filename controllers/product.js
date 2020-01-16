@@ -68,7 +68,7 @@ router.post('/', [
 
         await product.save();
 
-        await product.addImages(images.map((image) => models.Image.build(image)));
+        await product.setImages(images.map((image) => models.Image.build(image)));
 
         return res.json({
             code: '00',
@@ -129,7 +129,7 @@ router.put('/:id', [
 
     const { images, ...productData } = req.body;
 
-    await product.addImages(images.map((image) => models.Image.build(image)));
+    await product.setImages(images.map((image) => models.Image.build(image)));
 
     try {
         await product.update(productData);
